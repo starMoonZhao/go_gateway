@@ -2,10 +2,14 @@ package router
 
 import (
 	"github.com/e421083458/golang_common/lib"
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/starMoonZhao/go_gateway/controller"
 	"github.com/starMoonZhao/go_gateway/docs"
+	"github.com/starMoonZhao/go_gateway/middleware"
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
+	"log"
 )
 
 // @title Swagger Example API
@@ -71,5 +75,36 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	})
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	//注册登录模块路由
+	adminLoginRouter := router.Group("/admin_login")
+	//创建redis存储session
+	redisAddress := lib.GetConf("redis_map.list.default.proxy_list").([]interface{})[0].(string)
+	password := lib.GetStringConf("redis_map.list.default.password")
+	maxIdle := lib.GetIntConf("redis_map.list.default.max_idle")
+	//初始化redis类型的缓存存储
+	redisStore, err := sessions.NewRedisStore(maxIdle, "tcp", redisAddress, password, []byte("secret"))
+	if err != nil {
+		log.Fatalf("sessions.NewRedisStore err: %v", err)
+	}
+	//向该路由注册所需的中间件
+	adminLoginRouter.Use(sessions.Sessions("mysession", redisStore),
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.TranslationMiddleware())
+	{
+		controller.AdminLoginRegister(adminLoginRouter)
+	}
+
+	//注册登录后信息模块路由
+	adminRouter := router.Group("/admin")
+	//向该路由注册所需的中间件
+	adminRouter.Use(sessions.Sessions("mysession", redisStore),
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.SessionAuthMiddleware(),
+		middleware.TranslationMiddleware())
+	{
+		controller.AdminRegister(adminRouter)
+	}
 	return router
 }

@@ -16,6 +16,7 @@ require (
 	github.com/swaggo/swag v1.16.3
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.29.0
+	gorm.io/gorm v1.22.4
 )
 
 replace github.com/gin-contrib/sse v0.1.0 => github.com/e421083458/sse v0.1.1
