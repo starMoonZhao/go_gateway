@@ -20,10 +20,10 @@ func (admin *Admin) TableName() string {
 	return "gateway_admin"
 }
 
-func (admin *Admin) Find(c *gin.Context, tx *gorm.DB, search *Admin) error {
-	err := tx.WithContext(c).Where(search).Find(admin).Error
-	if err != nil {
-		return err
-	}
-	return nil
+func (admin *Admin) Find(c *gin.Context, tx *gorm.DB) error {
+	return tx.WithContext(c).Where(admin).Find(admin).Error
+}
+
+func (admin *Admin) Save(c *gin.Context, tx *gorm.DB) error {
+	return tx.WithContext(c).Save(admin).Error
 }

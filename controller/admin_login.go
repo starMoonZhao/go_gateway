@@ -20,6 +20,8 @@ func AdminLoginRegister(group *gin.RouterGroup) {
 	adminLoginController := &AdminLoginController{}
 	//注册路由
 	group.POST("/login", adminLoginController.AdminLogin)
+	group.POST("/logout", adminLoginController.AdminLogout)
+
 }
 
 // AdminLogin godoc
@@ -46,8 +48,8 @@ func (adminLoginController *AdminLoginController) AdminLogin(c *gin.Context) {
 		return
 	}
 	//查询登录人员信息
-	admin := &dao.Admin{}
-	err = admin.Find(c, tx, &dao.Admin{UserName: adminLoginInput.UserName})
+	admin := &dao.Admin{UserName: adminLoginInput.UserName}
+	err = admin.Find(c, tx)
 	if err != nil {
 		middleware.ResponseError(c, 1003, err)
 		return
@@ -77,4 +79,24 @@ func (adminLoginController *AdminLoginController) AdminLogin(c *gin.Context) {
 	}
 	outParam := &dto.AdminLoginOutput{Token: adminLoginInput.UserName}
 	middleware.ResponseSuccess(c, outParam)
+}
+
+// AdminLogout godoc
+// @Summary 管理员登出
+// @Description 管理员登出
+// @Tags 管理员登出接口
+// @ID /admin_login/logout
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} middleware.Response{data=string} "success"
+// @Router /admin_login/logout [post]
+func (adminLoginController *AdminLoginController) AdminLogout(c *gin.Context) {
+	//获取session客户端
+	sessions := sessions.Default(c)
+	sessions.Delete(public.AdminSessionInfoKey)
+	if err := sessions.Save(); err != nil {
+		middleware.ResponseError(c, 1007, err)
+		return
+	}
+	middleware.ResponseSuccess(c, "")
 }

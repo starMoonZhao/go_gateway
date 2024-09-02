@@ -1,4 +1,12 @@
 definitions:
+  dto.AdminChangePwdInput:
+    properties:
+      password:
+        example: "123456"
+        type: string
+    required:
+    - password
+    type: object
   dto.AdminInfoOutput:
     properties:
       avatar:
@@ -86,6 +94,34 @@ paths:
       summary: 管理员登录信息查询
       tags:
       - 管理员登录信息查询接口
+  /admin/change_pwd:
+    put:
+      consumes:
+      - application/json
+      description: 管理员登录密码修改
+      operationId: /admin/change_pwd
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AdminChangePwdInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/middleware.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 管理员登录密码修改
+      tags:
+      - 管理员登录密码修改接口
   /admin_login/login:
     post:
       consumes:
@@ -114,4 +150,25 @@ paths:
       summary: 管理员登录
       tags:
       - 管理员登录接口
+  /admin_login/logout:
+    post:
+      consumes:
+      - application/json
+      description: 管理员登出
+      operationId: /admin_login/logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/middleware.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 管理员登出
+      tags:
+      - 管理员登出接口
 swagger: "2.0"
