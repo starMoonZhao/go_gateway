@@ -7,7 +7,7 @@ import (
 )
 
 type Admin struct {
-	Id        int       `json:"id" gorm:"primary_key" description:"自增主键"`
+	ID        int64     `json:"id" gorm:"primary_key" description:"自增主键"`
 	UserName  string    `json:"username" gorm:"column:user_name" description:"用户名称"`
 	Salt      string    `json:"salt" gorm:"column:salt" description:"盐"`
 	Password  string    `json:"password" gorm:"column:password" description:"密码"`

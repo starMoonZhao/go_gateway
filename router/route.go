@@ -106,5 +106,29 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	{
 		controller.AdminRegister(adminRouter)
 	}
+
+	//注册服务管理模块路由
+	serviceRouter := router.Group("/service")
+	//向该路由注册所需的中间件
+	serviceRouter.Use(sessions.Sessions("mysession", redisStore),
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.SessionAuthMiddleware(),
+		middleware.TranslationMiddleware())
+	{
+		controller.ServiceRegister(serviceRouter)
+	}
+
+	//注册租户管理模块路由
+	appRouter := router.Group("/app")
+	//向该路由注册所需的中间件
+	appRouter.Use(sessions.Sessions("mysession", redisStore),
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.SessionAuthMiddleware(),
+		middleware.TranslationMiddleware())
+	{
+		controller.APPRegister(appRouter)
+	}
 	return router
 }

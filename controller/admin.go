@@ -25,7 +25,7 @@ func AdminRegister(group *gin.RouterGroup) {
 // AdminInfo godoc
 // @Summary 管理员登录信息查询
 // @Description 管理员登录信息查询
-// @Tags 管理员登录信息查询接口
+// @Tags 管理员管理
 // @ID /admin/admin_info
 // @Accept  json
 // @Produce  json
@@ -38,7 +38,7 @@ func (adminController *AdminController) AdminInfo(c *gin.Context) {
 	//取出用户session信息
 	adminsessionInfo := &dto.AdminSessionInfo{}
 	if err := json.Unmarshal([]byte(fmt.Sprint(sessiosInfo)), adminsessionInfo); err != nil {
-		middleware.ResponseError(c, 2000, err)
+		middleware.ResponseError(c, 2011, err)
 		return
 	}
 
@@ -57,7 +57,7 @@ func (adminController *AdminController) AdminInfo(c *gin.Context) {
 // AdminChangePwd godoc
 // @Summary 管理员登录密码修改
 // @Description 管理员登录密码修改
-// @Tags 管理员登录密码修改接口
+// @Tags 管理员管理
 // @ID /admin/change_pwd
 // @Accept  json
 // @Produce  json
@@ -68,7 +68,7 @@ func (adminController *AdminController) AdminChangePwd(c *gin.Context) {
 	//校验登录信息是否合法并解析传参
 	adminChangePwdInput := &dto.AdminChangePwdInput{}
 	if err := adminChangePwdInput.BindValidParam(c); err != nil {
-		middleware.ResponseError(c, 2001, err)
+		middleware.ResponseError(c, 2021, err)
 		return
 	}
 
@@ -78,20 +78,20 @@ func (adminController *AdminController) AdminChangePwd(c *gin.Context) {
 	//取出用户session信息
 	adminsessionInfo := &dto.AdminSessionInfo{}
 	if err := json.Unmarshal([]byte(fmt.Sprint(sessiosInfo)), adminsessionInfo); err != nil {
-		middleware.ResponseError(c, 2002, err)
+		middleware.ResponseError(c, 2022, err)
 		return
 	}
 
 	//获取数据库连接池
 	tx, err := lib.GetGormPool("default")
 	if err != nil {
-		middleware.ResponseError(c, 2003, err)
+		middleware.ResponseError(c, 2023, err)
 	}
 	//查询用户信息 Admin
-	admin := &dao.Admin{Id: adminsessionInfo.Id}
+	admin := &dao.Admin{ID: adminsessionInfo.Id}
 	err = admin.Find(c, tx)
 	if err != nil {
-		middleware.ResponseError(c, 2004, err)
+		middleware.ResponseError(c, 2024, err)
 		return
 	}
 
@@ -102,7 +102,7 @@ func (adminController *AdminController) AdminChangePwd(c *gin.Context) {
 	admin.Password = newEncodeSaltPwd
 	err = admin.Save(c, tx)
 	if err != nil {
-		middleware.ResponseError(c, 2005, err)
+		middleware.ResponseError(c, 2025, err)
 		return
 	}
 

@@ -27,7 +27,7 @@ func AdminLoginRegister(group *gin.RouterGroup) {
 // AdminLogin godoc
 // @Summary 管理员登录
 // @Description 管理员登录
-// @Tags 管理员登录接口
+// @Tags 管理员登录
 // @ID /admin_login/login
 // @Accept  json
 // @Produce  json
@@ -38,35 +38,35 @@ func (adminLoginController *AdminLoginController) AdminLogin(c *gin.Context) {
 	//校验登录信息是否合法
 	adminLoginInput := &dto.AdminLoginInput{}
 	if err := adminLoginInput.BindValidParam(c); err != nil {
-		middleware.ResponseError(c, 1001, err)
+		middleware.ResponseError(c, 1011, err)
 		return
 	}
 	//获取数据库连接池
 	tx, err := lib.GetGormPool("default")
 	if err != nil {
-		middleware.ResponseError(c, 1002, err)
+		middleware.ResponseError(c, 1012, err)
 		return
 	}
 	//查询登录人员信息
 	admin := &dao.Admin{UserName: adminLoginInput.UserName}
 	err = admin.Find(c, tx)
 	if err != nil {
-		middleware.ResponseError(c, 1003, err)
+		middleware.ResponseError(c, 1013, err)
 		return
 	}
 	//获取加盐密码编码->密码校验
 	inputPassword := public.EncodeSaltPassword(admin.Salt, adminLoginInput.Password)
 	if inputPassword != admin.Password {
-		middleware.ResponseError(c, 1004, errors.New("密码错误"))
+		middleware.ResponseError(c, 1014, errors.New("密码错误"))
 		return
 	}
 
 	//设置session
-	adminSessionInfo := &dto.AdminSessionInfo{Id: admin.Id, UserName: admin.UserName, LoginTime: time.Now()}
+	adminSessionInfo := &dto.AdminSessionInfo{Id: admin.ID, UserName: admin.UserName, LoginTime: time.Now()}
 	//将session转换为json
 	adminSessionInfoJson, err := json.Marshal(adminSessionInfo)
 	if err != nil {
-		middleware.ResponseError(c, 1005, err)
+		middleware.ResponseError(c, 1015, err)
 		return
 	}
 	//获取session客户端
@@ -74,7 +74,7 @@ func (adminLoginController *AdminLoginController) AdminLogin(c *gin.Context) {
 	sessions.Set(public.AdminSessionInfoKey, string(adminSessionInfoJson))
 	err = sessions.Save()
 	if err != nil {
-		middleware.ResponseError(c, 1006, err)
+		middleware.ResponseError(c, 1016, err)
 		return
 	}
 	outParam := &dto.AdminLoginOutput{Token: adminLoginInput.UserName}
@@ -84,7 +84,7 @@ func (adminLoginController *AdminLoginController) AdminLogin(c *gin.Context) {
 // AdminLogout godoc
 // @Summary 管理员登出
 // @Description 管理员登出
-// @Tags 管理员登出接口
+// @Tags 管理员登录
 // @ID /admin_login/logout
 // @Accept  json
 // @Produce  json
@@ -95,7 +95,7 @@ func (adminLoginController *AdminLoginController) AdminLogout(c *gin.Context) {
 	sessions := sessions.Default(c)
 	sessions.Delete(public.AdminSessionInfoKey)
 	if err := sessions.Save(); err != nil {
-		middleware.ResponseError(c, 1007, err)
+		middleware.ResponseError(c, 1021, err)
 		return
 	}
 	middleware.ResponseSuccess(c, "")

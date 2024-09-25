@@ -7,7 +7,7 @@ import (
 )
 
 type AdminInfoOutput struct {
-	Id           int       `json:"id"`
+	Id           int64     `json:"id"`
 	UserName     string    `json:"username"`
 	LoginTime    time.Time `json:"login_time"`
 	Avatar       string    `json:"avatar"`
