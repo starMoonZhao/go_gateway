@@ -18,3 +18,12 @@ const (
 	HTTPDontNeedHttps = 0
 	HTTPNeedHttps     = 1
 )
+
+var (
+	//定义服务类型字典
+	LoadTypeMap = map[int]string{
+		LoadTypeHTTP: "HTTP",
+		LoadTypeTCP:  "TCP",
+		LoadTypeGRPC: "GRPC",
+	}
+)

@@ -67,3 +67,15 @@ func (serviceInfo *ServiceInfo) PageList(c *gin.Context, tx *gorm.DB, param *dto
 func (serviceInfo *ServiceInfo) Delete(c *gin.Context, tx *gorm.DB) error {
 	return tx.WithContext(c).Where(serviceInfo).Delete(serviceInfo).Error
 }
+
+// 服务分类信息查询
+func (serviceInfo *ServiceInfo) GroupByLoadType(c *gin.Context, tx *gorm.DB) ([]dto.DashServiceStatItemOutput, error) {
+	//结果集
+	dashServiceStatItemOutputList := []dto.DashServiceStatItemOutput{}
+
+	if err := tx.WithContext(c).Table(serviceInfo.TableName()).Where("is_delete = 0").Select("load_type", "count(*) as value").Group("load_type").Scan(&dashServiceStatItemOutputList).Error; err != nil {
+		return nil, err
+	}
+
+	return dashServiceStatItemOutputList, nil
+}

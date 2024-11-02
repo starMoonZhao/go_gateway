@@ -237,7 +237,7 @@ func (appController *APPController) APPUpdate(c *gin.Context) {
 	app.Qpd = appUpdateInput.Qpd
 	if err := app.Save(c, tx); err != nil {
 		tx.Rollback()
-		middleware.ResponseError(c, 3045, err)
+		middleware.ResponseError(c, 4044, err)
 		return
 	}
 

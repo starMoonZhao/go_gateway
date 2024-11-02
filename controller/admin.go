@@ -47,9 +47,9 @@ func (adminController *AdminController) AdminInfo(c *gin.Context) {
 		Id:           adminsessionInfo.Id,
 		UserName:     adminsessionInfo.UserName,
 		LoginTime:    adminsessionInfo.LoginTime,
-		Avatar:       "",
+		Avatar:       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
 		Introduction: "",
-		Roles:        []string{},
+		Roles:        []string{"admin"},
 	}
 	middleware.ResponseSuccess(c, out)
 }

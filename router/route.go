@@ -130,5 +130,17 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	{
 		controller.APPRegister(appRouter)
 	}
+
+	//注册首页大盘模块路由
+	dashboardRouter := router.Group("/dashboard")
+	//向该路由注册所需的中间件
+	dashboardRouter.Use(sessions.Sessions("mysession", redisStore),
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.SessionAuthMiddleware(),
+		middleware.TranslationMiddleware())
+	{
+		controller.DashboardRegister(dashboardRouter)
+	}
 	return router
 }
