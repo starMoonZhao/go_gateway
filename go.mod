@@ -11,6 +11,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/gorilla/sessions v1.1.3 // indirect
 	github.com/pkg/errors v0.9.1
+	github.com/samuel/go-zookeeper v0.0.0-20201211165307-7117e9ea2414
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.3

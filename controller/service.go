@@ -238,7 +238,7 @@ func (serviceController *ServiceController) ServiceAddHTTP(c *gin.Context) {
 	httpRule.NeedStripUri = serviceAddHTTPInput.NeedStripUri
 	httpRule.NeedWebsocket = serviceAddHTTPInput.NeedWebsocket
 	httpRule.UrlRewrite = serviceAddHTTPInput.UrlRewrite
-	httpRule.HeaderTransfor = serviceAddHTTPInput.HeaderTransfor
+	httpRule.HeaderTransfer = serviceAddHTTPInput.HeaderTransfer
 	if err := httpRule.Save(c, tx); err != nil {
 		tx.Rollback()
 		middleware.ResponseError(c, 3036, err)
@@ -344,7 +344,7 @@ func (serviceController *ServiceController) ServiceUpdateHTTP(c *gin.Context) {
 	httpRule.NeedStripUri = serviceUpdateHTTPInput.NeedStripUri
 	httpRule.NeedWebsocket = serviceUpdateHTTPInput.NeedWebsocket
 	httpRule.UrlRewrite = serviceUpdateHTTPInput.UrlRewrite
-	httpRule.HeaderTransfor = serviceUpdateHTTPInput.HeaderTransfor
+	httpRule.HeaderTransfer = serviceUpdateHTTPInput.HeaderTransfer
 	if err := httpRule.Save(c, tx); err != nil {
 		tx.Rollback()
 		middleware.ResponseError(c, 3046, err)
@@ -744,7 +744,7 @@ func (serviceController *ServiceController) ServiceAddGRPC(c *gin.Context) {
 	serviceId := serviceInfo.ID
 	//保存grpc服务的规则信息
 	grpcRule.ServiceID = serviceId
-	grpcRule.HeaderTransfor = serviceAddGRPCInput.HeaderTransfor
+	grpcRule.HeaderTransfer = serviceAddGRPCInput.HeaderTransfer
 	if err := grpcRule.Save(c, tx); err != nil {
 		tx.Rollback()
 		middleware.ResponseError(c, 3097, err)
@@ -846,7 +846,7 @@ func (serviceController *ServiceController) ServiceUpdateGRPC(c *gin.Context) {
 	//更新grpc服务的规则信息
 	grpcRule := serviceDetail.GRPCRule
 	grpcRule.Port = serviceUpdateGRPCInput.Port
-	grpcRule.HeaderTransfor = serviceUpdateGRPCInput.HeaderTransfor
+	grpcRule.HeaderTransfer = serviceUpdateGRPCInput.HeaderTransfer
 	if err := grpcRule.Save(c, tx); err != nil {
 		tx.Rollback()
 		middleware.ResponseError(c, 3106, err)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/e421083458/golang_common/lib"
 	"github.com/gin-gonic/gin"
+	"github.com/starMoonZhao/go_gateway/middleware"
 	"log"
 	"net/http"
 	"time"
@@ -18,7 +19,7 @@ var (
 func HttpServerRun() {
 	gin.SetMode(lib.GetStringConf("proxy.base.debug_mode"))
 	//创建路由
-	router := InitRouter()
+	router := InitRouter(middleware.RecoveryMiddleware(), middleware.RequestLog())
 	//根据配置创建http代理服务器
 	HttpSrvHandler := &http.Server{
 		Addr:           lib.GetStringConf("proxy.http.addr"),
@@ -28,7 +29,7 @@ func HttpServerRun() {
 		MaxHeaderBytes: 1 << uint(lib.GetIntConf("proxy.http.max_header_bytes")),
 	}
 	//启动服务器
-	log.Println(" [INFO] HttpServerRun:%s\n", lib.GetStringConf("proxy.http.addr"))
+	log.Printf(" [INFO] HttpServerRun:%s\n", lib.GetStringConf("proxy.http.addr"))
 	if err := HttpSrvHandler.ListenAndServe(); err != nil {
 		log.Fatalf(" [ERROR] HttpServerRun:%s err:%v\n", lib.GetStringConf("proxy.http.addr"), err)
 	}
@@ -48,7 +49,7 @@ func HttpServerStop() {
 func HttpsServerRun() {
 	gin.SetMode(lib.GetStringConf("proxy.base.debug_mode"))
 	//创建路由
-	router := InitRouter()
+	router := InitRouter(middleware.RecoveryMiddleware(), middleware.RequestLog())
 	//根据配置创建http代理服务器
 	HttpsSrvHandler := &http.Server{
 		Addr:           lib.GetStringConf("proxy.https.addr"),
@@ -58,8 +59,8 @@ func HttpsServerRun() {
 		MaxHeaderBytes: 1 << uint(lib.GetIntConf("proxy.https.max_header_bytes")),
 	}
 	//启动https服务器
-	log.Println(" [INFO] HttpsServerRun:%s\n", lib.GetStringConf("proxy.https.addr"))
-	if err := HttpsSrvHandler.ListenAndServeTLS("./cert_file/server.crt", "./cert_file/server.key"); err != nil {
+	log.Printf(" [INFO] HttpsServerRun:%s\n", lib.GetStringConf("proxy.https.addr"))
+	if err := HttpsSrvHandler.ListenAndServeTLS("./cert_file/server.cer", "./cert_file/server.key"); err != nil {
 		log.Fatalf(" [ERROR] HttpsServerRun:%s err:%v\n", lib.GetStringConf("proxy.https.addr"), err)
 	}
 }

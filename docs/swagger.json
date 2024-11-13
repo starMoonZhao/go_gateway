@@ -552,7 +552,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.DashServiceStatItemOutput"
+                                            "$ref": "#/definitions/dto.DashServiceStatOutput"
                                         }
                                     }
                                 }
@@ -1109,7 +1109,7 @@
         "dao.GrpcRule": {
             "type": "object",
             "properties": {
-                "header_transfor": {
+                "header_transfer": {
                     "type": "string"
                 },
                 "id": {
@@ -1126,7 +1126,7 @@
         "dao.HttpRule": {
             "type": "object",
             "properties": {
-                "header_transfor": {
+                "header_transfer": {
                     "type": "string"
                 },
                 "id": {
@@ -1474,6 +1474,23 @@
                 }
             }
         },
+        "dto.DashServiceStatOutput": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.DashServiceStatItemOutput"
+                    }
+                },
+                "legend": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "dto.PanelGroupDataOutput": {
             "type": "object",
             "properties": {
@@ -1510,7 +1527,7 @@
                 "forbid_list": {
                     "type": "string"
                 },
-                "header_transfor": {
+                "header_transfer": {
                     "type": "string"
                 },
                 "ip_list": {
@@ -1568,7 +1585,7 @@
                     "minimum": 0,
                     "example": 0
                 },
-                "header_transfor": {
+                "header_transfer": {
                     "description": "header转换",
                     "type": "string",
                     "example": ""
@@ -1703,9 +1720,6 @@
                 "forbid_list": {
                     "type": "string"
                 },
-                "header_transfor": {
-                    "type": "string"
-                },
                 "ip_list": {
                     "type": "string"
                 },
@@ -1832,7 +1846,7 @@
                 "forbid_list": {
                     "type": "string"
                 },
-                "header_transfor": {
+                "header_transfer": {
                     "type": "string"
                 },
                 "id": {
@@ -1894,7 +1908,7 @@
                     "minimum": 0,
                     "example": 0
                 },
-                "header_transfor": {
+                "header_transfer": {
                     "description": "header转换",
                     "type": "string",
                     "example": ""

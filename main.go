@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/e421083458/golang_common/lib"
+	"github.com/starMoonZhao/go_gateway/dao"
 	"github.com/starMoonZhao/go_gateway/http_proxy_router"
 	"github.com/starMoonZhao/go_gateway/router"
 	"os"
@@ -10,14 +11,9 @@ import (
 	"syscall"
 )
 
-//var (
-//	endpoint = flag.String("endpoint", "", "input endpoint dashboard or server")
-//	config   = flag.String("config", "", "input config file like ./conf/dev/")
-//)
-
 var (
 	endpoint = flag.String("endpoint", "", "input endpoint dashboard or server")
-	//config   = flag.String("config", "", "input config file like ./conf/dev/")
+	config   = flag.String("config", "", "input config file like ./conf/dev/")
 )
 
 func main() {
@@ -27,13 +23,13 @@ func main() {
 		flag.Usage()
 		os.Exit(1)
 	}
-	//if *config == "" {
-	//	flag.Usage()
-	//	os.Exit(1)
-	//}
+	if *config == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
 
 	if *endpoint == "dashboard" {
-		lib.InitModule("", []string{"base", "mysql", "redis"})
+		lib.InitModule(*config, []string{"base", "mysql", "redis"})
 		defer lib.Destroy()
 		router.HttpServerRun()
 
@@ -43,8 +39,11 @@ func main() {
 
 		router.HttpServerStop()
 	} else {
-		lib.InitModule("", []string{"base", "mysql", "redis"})
+		lib.InitModule(*config, []string{"base", "mysql", "redis"})
 		defer lib.Destroy()
+
+		//系统启动 加载服务信息
+		dao.ServiceManegerHandler.LoadOnce()
 
 		//启动http代理服务器
 		go func() {
@@ -52,7 +51,7 @@ func main() {
 		}()
 		//启动https代理服务器
 		go func() {
-			http_proxy_router.HttpServerRun()
+			http_proxy_router.HttpsServerRun()
 		}()
 
 		quit := make(chan os.Signal)
@@ -65,5 +64,14 @@ func main() {
 		//停止https代理服务器
 		http_proxy_router.HttpsServerStop()
 	}
+	/*	lib.InitModule("./conf/dev/", []string{"base", "mysql", "redis"})
+		defer lib.Destroy()
+		router.HttpServerRun()
+
+		quit := make(chan os.Signal)
+		signal.Notify(quit, syscall.SIGKILL, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGTERM)
+		<-quit
+
+		router.HttpServerStop()*/
 
 }

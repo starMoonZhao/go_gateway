@@ -49,7 +49,7 @@ type ServiceAddHTTPInput struct {
 	NeedStripUri   int    `json:"need_strip_uri" form:"need_strip_uri" comment:"启用strip_uri" example:"0" validate:"max=1,min=0"`         //启用strip_uri
 	NeedWebsocket  int    `json:"need_websocket" form:"need_websocket" comment:"是否支持websocket" example:"0" validate:"max=1,min=0"`       //是否支持websocket
 	UrlRewrite     string `json:"url_rewrite" form:"url_rewrite" comment:"url重写功能" example:"" validate:"valid_url_rewrite"`              //url重写功能
-	HeaderTransfor string `json:"header_transfor" form:"header_transfor" comment:"header转换" example:"" validate:"valid_header_transfor"` //header转换
+	HeaderTransfer string `json:"header_transfer" form:"header_transfer" comment:"header转换" example:"" validate:"valid_header_transfer"` //header转换
 
 	//权限控制相关字段
 	OpenAuth          int    `json:"open_auth" form:"open_auth" comment:"是否开启权限" example:"0" validate:"max=1,min=0"`                   //关键词
@@ -83,7 +83,7 @@ type ServiceUpdateHTTPInput struct {
 	NeedStripUri   int    `json:"need_strip_uri" form:"need_strip_uri" comment:"启用strip_uri" example:"0" validate:"max=1,min=0"`           //启用strip_uri
 	NeedWebsocket  int    `json:"need_websocket" form:"need_websocket" comment:"是否支持websocket" example:"0" validate:"max=1,min=0"`         //是否支持websocket
 	UrlRewrite     string `json:"url_rewrite" form:"url_rewrite" comment:"url重写功能" example:"" validate:"valid_url_rewrite"`                //url重写功能
-	HeaderTransfor string `json:"header_transfor" form:"header_transfor" comment:"header转换" example:"" validate:"valid_header_transfor"`   //header转换
+	HeaderTransfer string `json:"header_transfer" form:"header_transfer" comment:"header转换" example:"" validate:"valid_header_transfer"`   //header转换
 
 	//权限控制相关字段
 	OpenAuth          int    `json:"open_auth" form:"open_auth" comment:"是否开启权限" example:"0" validate:"max=1,min=0"`                   //关键词
@@ -176,7 +176,7 @@ type ServiceAddGRPCInput struct {
 	ServiceName       string `json:"service_name" form:"service_name" comment:"服务名称" validate:"required,valid_service_name"`
 	ServiceDesc       string `json:"service_desc" form:"service_desc" comment:"服务描述" validate:"required"`
 	Port              int    `json:"port" form:"port" comment:"端口，需要设置8001-8999范围内" validate:"required,min=8001,max=8999"`
-	HeaderTransfor    string `json:"header_transfor" form:"header_transfor" comment:"metadata转换" validate:"valid_header_transfor"`
+	HeaderTransfer    string `json:"header_transfer" form:"header_transfer" comment:"metadata转换" validate:"valid_header_transfer"`
 	OpenAuth          int    `json:"open_auth" form:"open_auth" comment:"是否开启权限验证" validate:""`
 	BlackList         string `json:"black_list" form:"black_list" comment:"黑名单IP，以逗号间隔，白名单优先级高于黑名单" validate:"valid_iplist"`
 	WhiteList         string `json:"white_list" form:"white_list" comment:"白名单IP，以逗号间隔，白名单优先级高于黑名单" validate:"valid_iplist"`
@@ -198,7 +198,7 @@ type ServiceUpdateGRPCInput struct {
 	ServiceName       string `json:"service_name" form:"service_name" comment:"服务名称" validate:"required,valid_service_name"`
 	ServiceDesc       string `json:"service_desc" form:"service_desc" comment:"服务描述" validate:"required"`
 	Port              int    `json:"port" form:"port" comment:"端口，需要设置8001-8999范围内" validate:"required,min=8001,max=8999"`
-	HeaderTransfor    string `json:"header_transfor" form:"header_transfor" comment:"metadata转换" validate:"valid_header_transfor"`
+	HeaderTransfer    string `json:"header_transfer" form:"header_transfer" comment:"metadata转换" validate:"valid_header_transfer"`
 	OpenAuth          int    `json:"open_auth" form:"open_auth" comment:"是否开启权限验证" validate:""`
 	BlackList         string `json:"black_list" form:"black_list" comment:"黑名单IP，以逗号间隔，白名单优先级高于黑名单" validate:"valid_iplist"`
 	WhiteList         string `json:"white_list" form:"white_list" comment:"白名单IP，以逗号间隔，白名单优先级高于黑名单" validate:"valid_iplist"`

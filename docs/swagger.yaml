@@ -43,7 +43,7 @@ definitions:
     type: object
   dao.GrpcRule:
     properties:
-      header_transfor:
+      header_transfer:
         type: string
       id:
         type: integer
@@ -54,7 +54,7 @@ definitions:
     type: object
   dao.HttpRule:
     properties:
-      header_transfor:
+      header_transfer:
         type: string
       id:
         type: integer
@@ -284,6 +284,17 @@ definitions:
       value:
         type: integer
     type: object
+  dto.DashServiceStatOutput:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.DashServiceStatItemOutput'
+        type: array
+      legend:
+        items:
+          type: string
+        type: array
+    type: object
   dto.PanelGroupDataOutput:
     properties:
       appNum:
@@ -303,7 +314,7 @@ definitions:
         type: integer
       forbid_list:
         type: string
-      header_transfor:
+      header_transfer:
         type: string
       ip_list:
         type: string
@@ -345,7 +356,7 @@ definitions:
         example: 0
         minimum: 0
         type: integer
-      header_transfor:
+      header_transfer:
         description: header转换
         example: ""
         type: string
@@ -455,8 +466,6 @@ definitions:
         type: integer
       forbid_list:
         type: string
-      header_transfor:
-        type: string
       ip_list:
         type: string
       open_auth:
@@ -545,7 +554,7 @@ definitions:
         type: integer
       forbid_list:
         type: string
-      header_transfor:
+      header_transfer:
         type: string
       id:
         type: integer
@@ -590,7 +599,7 @@ definitions:
         example: 0
         minimum: 0
         type: integer
-      header_transfor:
+      header_transfer:
         description: header转换
         example: ""
         type: string
@@ -1094,7 +1103,7 @@ paths:
             - $ref: '#/definitions/middleware.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/dto.DashServiceStatItemOutput'
+                  $ref: '#/definitions/dto.DashServiceStatOutput'
               type: object
       summary: 服务统计
       tags:

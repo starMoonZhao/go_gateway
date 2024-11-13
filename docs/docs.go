@@ -563,7 +563,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.DashServiceStatItemOutput"
+                                            "$ref": "#/definitions/dto.DashServiceStatOutput"
                                         }
                                     }
                                 }
@@ -1120,7 +1120,7 @@ const docTemplate = `{
         "dao.GrpcRule": {
             "type": "object",
             "properties": {
-                "header_transfor": {
+                "header_transfer": {
                     "type": "string"
                 },
                 "id": {
@@ -1137,7 +1137,7 @@ const docTemplate = `{
         "dao.HttpRule": {
             "type": "object",
             "properties": {
-                "header_transfor": {
+                "header_transfer": {
                     "type": "string"
                 },
                 "id": {
@@ -1485,6 +1485,23 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.DashServiceStatOutput": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.DashServiceStatItemOutput"
+                    }
+                },
+                "legend": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "dto.PanelGroupDataOutput": {
             "type": "object",
             "properties": {
@@ -1521,7 +1538,7 @@ const docTemplate = `{
                 "forbid_list": {
                     "type": "string"
                 },
-                "header_transfor": {
+                "header_transfer": {
                     "type": "string"
                 },
                 "ip_list": {
@@ -1579,7 +1596,7 @@ const docTemplate = `{
                     "minimum": 0,
                     "example": 0
                 },
-                "header_transfor": {
+                "header_transfer": {
                     "description": "header转换",
                     "type": "string",
                     "example": ""
@@ -1714,9 +1731,6 @@ const docTemplate = `{
                 "forbid_list": {
                     "type": "string"
                 },
-                "header_transfor": {
-                    "type": "string"
-                },
                 "ip_list": {
                     "type": "string"
                 },
@@ -1843,7 +1857,7 @@ const docTemplate = `{
                 "forbid_list": {
                     "type": "string"
                 },
-                "header_transfor": {
+                "header_transfer": {
                     "type": "string"
                 },
                 "id": {
@@ -1905,7 +1919,7 @@ const docTemplate = `{
                     "minimum": 0,
                     "example": 0
                 },
-                "header_transfor": {
+                "header_transfer": {
                     "description": "header转换",
                     "type": "string",
                     "example": ""
