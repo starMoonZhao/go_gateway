@@ -21,8 +21,8 @@ type ServiceListItemOutput struct {
 	ServiceDesc string `json:"service_desc" form:"service_desc"` //服务描述
 	LoadType    int    `json:"load_type" form:"load_type"`       //服务类型
 	ServiceAddr string `json:"service_addr" form:"service_addr"` //服务地址
-	Qps         int    `json:"qps" form:"qps"`                   //qps
-	Qpd         int    `json:"qpd" form:"qpd"`                   //qpd
+	Qps         int64  `json:"qps" form:"qps"`                   //qps
+	Qpd         int64  `json:"qpd" form:"qpd"`                   //qpd
 	TotalNode   int    `json:"total_node" form:"total_node"`     //节点总数
 }
 

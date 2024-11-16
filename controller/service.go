@@ -5,6 +5,7 @@ import (
 	"github.com/e421083458/golang_common/lib"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/starMoonZhao/go_gateway/circuit_rate"
 	"github.com/starMoonZhao/go_gateway/dao"
 	"github.com/starMoonZhao/go_gateway/dto"
 	"github.com/starMoonZhao/go_gateway/middleware"
@@ -112,14 +113,21 @@ func (serviceController *ServiceController) ServiceList(c *gin.Context) {
 
 		//获取负载均衡ip列表
 		ipList := strings.Split(serviceDetail.LoadBalance.IpList, ",")
+
+		//获取服务流量统计器
+		flowCount, err := circuit_rate.FlowCounterHandler.GetFlowCounter(fmt.Sprintf("%s_%s", public.FlowService, serviceDetail.Info.ServiceName))
+		if err != nil {
+			middleware.ResponseError(c, 3015, err)
+			return
+		}
 		serviceInfoOutputItem := dto.ServiceListItemOutput{
 			Id:          serviceInfoItem.ID,
 			ServiceName: serviceInfoItem.ServiceName,
 			ServiceDesc: serviceInfoItem.ServiceDesc,
 			LoadType:    serviceInfoItem.LoadType,
 			ServiceAddr: serviceAddr,
-			Qps:         0,
-			Qpd:         0,
+			Qps:         flowCount.QPS,
+			Qpd:         flowCount.TotalCount,
 			TotalNode:   len(ipList),
 		}
 		serviceInfoOutList = append(serviceInfoOutList, serviceInfoOutputItem)
@@ -443,18 +451,40 @@ func (serviceController *ServiceController) ServiceStat(c *gin.Context) {
 		return
 	}
 
-	//先构造虚假的统计信息数据
+	//获取数据库连接池
+	tx, err := lib.GetGormPool("default")
+	if err != nil {
+		middleware.ResponseError(c, 3062, err)
+		return
+	}
+
+	//查询服务基本信息
+	serviceInfo := &dao.ServiceInfo{ID: serviceDetailInput.ID}
+	if err := serviceInfo.Find(c, tx); err != nil {
+		middleware.ResponseError(c, 3063, err)
+		return
+	}
+
+	//获取服务流量统计器
+	flowCount, err := circuit_rate.FlowCounterHandler.GetFlowCounter(fmt.Sprintf("%s_%s", public.FlowService, serviceInfo.ServiceName))
 
 	//查询今日数据
 	todayList := []int64{}
 	currentTime := time.Now()
 	for i := 0; i <= currentTime.Hour(); i++ {
-		todayList = append(todayList, 0)
+		dateTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), i, 0, 0, 0, lib.TimeLocation)
+		hourData, _ := flowCount.GetHourData(dateTime)
+		todayList = append(todayList, hourData)
 	}
+
 	//查询昨日数据
 	yesterdayList := []int64{}
+	//昨日时间
+	yesterTime := currentTime.Add(-1 * time.Duration(time.Hour*24))
 	for i := 0; i <= 23; i++ {
-		yesterdayList = append(yesterdayList, 0)
+		dateTime := time.Date(yesterTime.Year(), yesterTime.Month(), yesterTime.Day(), i, 0, 0, 0, lib.TimeLocation)
+		hourData, _ := flowCount.GetHourData(dateTime)
+		yesterdayList = append(yesterdayList, hourData)
 	}
 
 	middleware.ResponseSuccess(c, &dto.ServiceStatOutput{

@@ -17,6 +17,15 @@ const (
 	//http服务是否使用https
 	HTTPDontNeedHttps = 0
 	HTTPNeedHttps     = 1
+
+	//流量统计数据在redis中存储的前缀标识
+	RedisFlowDayKey  = "flow_day_count"
+	RedisFlowHourKey = "flow_hour_count"
+
+	//流量统计器ID前缀
+	FlowTotal   = "flow_total"   //全站流量
+	FlowService = "flow_service" //服务流量
+	FlowApp     = "flow_app"     //租户流量
 )
 
 var (

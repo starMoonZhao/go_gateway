@@ -33,3 +33,12 @@ func Obj2Json(obj interface{}) string {
 	bts, _ := json.Marshal(obj)
 	return string(bts)
 }
+
+func InStringSlice(slice []string, str string) bool {
+	for _, v := range slice {
+		if v == str {
+			return true
+		}
+	}
+	return false
+}
