@@ -86,11 +86,11 @@ type ServiceUpdateHTTPInput struct {
 	HeaderTransfer string `json:"header_transfer" form:"header_transfer" comment:"header转换" example:"" validate:"valid_header_transfer"`   //header转换
 
 	//权限控制相关字段
-	OpenAuth          int    `json:"open_auth" form:"open_auth" comment:"是否开启权限" example:"0" validate:"max=1,min=0"`                   //关键词
-	BlackList         string `json:"black_list" form:"black_list" comment:"黑名单ip" example:"" validate:""`                              //黑名单ip
-	WhiteList         string `json:"white_list" form:"white_list" comment:"白名单ip" example:"" validate:""`                              //白名单ip
-	ClientIPFlowLimit int    `json:"client_ip_flow_limit" form:"client_ip_flow_limit" comment:"客户端ip限流" example:"0" validate:"min=0"` //客户端ip限流
-	ServiceFlowLimit  int    `json:"service_flow_limit" form:"service_flow_limit" comment:"服务端限流" example:"0" validate:"min=0"`        //服务端限流
+	OpenAuth          int    `json:"open_auth" form:"open_auth" comment:"是否开启权限" example:"0" validate:"max=1,min=0"`                 //关键词
+	BlackList         string `json:"black_list" form:"black_list" comment:"黑名单ip" example:"" validate:""`                            //黑名单ip
+	WhiteList         string `json:"white_list" form:"white_list" comment:"白名单ip" example:"" validate:""`                            //白名单ip
+	ClientIPFlowLimit int    `json:"clientip_flow_limit" form:"clientip_flow_limit" comment:"客户端ip限流" example:"0" validate:"min=0"` //客户端ip限流
+	ServiceFlowLimit  int    `json:"service_flow_limit" form:"service_flow_limit" comment:"服务端限流" example:"0" validate:"min=0"`      //服务端限流
 
 	//负载均衡相关字段
 	RoundType              int    `json:"round_type" form:"round_type" comment:"轮询方式" example:"0" validate:"max=3,min=0"`                                //轮询方式

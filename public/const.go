@@ -26,6 +26,10 @@ const (
 	FlowTotal   = "flow_total"   //全站流量
 	FlowService = "flow_service" //服务流量
 	FlowApp     = "flow_app"     //租户流量
+
+	//jwt校验
+	JwtSignKey = "jwt_sign_key"
+	JwtExpires = 60 * 60
 )
 
 var (

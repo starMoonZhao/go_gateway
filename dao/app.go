@@ -1,9 +1,12 @@
 package dao
 
 import (
+	"github.com/e421083458/golang_common/lib"
 	"github.com/gin-gonic/gin"
 	"github.com/starMoonZhao/go_gateway/dto"
 	"gorm.io/gorm"
+	"net/http/httptest"
+	"sync"
 	"time"
 )
 
@@ -71,4 +74,63 @@ func (app *APP) PageList(c *gin.Context, tx *gorm.DB, param *dto.APPListInput) (
 	}
 
 	return list, total, nil
+}
+
+var AppManegerHandler *AppManger
+
+func init() {
+	AppManegerHandler = NewAppManager()
+}
+
+type AppManger struct {
+	AppMap   map[string]*APP
+	AppSlice []*APP
+	Locker   sync.RWMutex
+	init     sync.Once
+	err      error
+}
+
+func NewAppManager() *AppManger {
+	return &AppManger{
+		AppMap:   map[string]*APP{},
+		AppSlice: []*APP{},
+		Locker:   sync.RWMutex{},
+		init:     sync.Once{},
+	}
+}
+
+// 系统初始化时加载租户信息
+func (appManger *AppManger) LoadOnce() error {
+	appManger.init.Do(func() {
+		//查询所有的租户信息
+		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+		tx, err := lib.GetGormPool("default")
+		if err != nil {
+			appManger.err = err
+			return
+		}
+		//分页条件
+		params := &dto.APPListInput{PageNum: 1, PageSize: 99999}
+		app := &APP{}
+		list, _, err := app.PageList(c, tx, params)
+		if err != nil {
+			appManger.err = err
+			return
+		}
+
+		appManger.Locker.Lock()
+		defer appManger.Locker.Unlock()
+		//将查询出的所有租户填充到AppManger中的AppMap、AppSlice
+		for _, appItem := range list {
+			tmpAppItem := appItem
+			appManger.AppMap[tmpAppItem.APPID] = &tmpAppItem
+			appManger.AppSlice = append(appManger.AppSlice, &tmpAppItem)
+		}
+	})
+	return appManger.err
+}
+
+// 获取全部租户
+func (appManger *AppManger) GetAppList() []*APP {
+	return appManger.AppSlice
 }

@@ -45,6 +45,9 @@ func main() {
 		//系统启动 加载服务信息
 		dao.ServiceManegerHandler.LoadOnce()
 
+		//系统启动 加载租户信息
+		dao.AppManegerHandler.LoadOnce()
+
 		//启动http代理服务器
 		go func() {
 			http_proxy_router.HttpServerRun()

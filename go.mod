@@ -4,8 +4,9 @@ go 1.14
 
 require (
 	github.com/boj/redistore v0.0.0-20180917114910-cd5dcc76aeff // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/e421083458/golang_common v1.2.1
-	github.com/garyburd/redigo v1.6.0 // indirect
+	github.com/garyburd/redigo v1.6.0
 	github.com/gin-gonic/contrib v0.0.0-20190526021735-7fb7810ed2a0
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-playground/locales v0.14.1
@@ -16,6 +17,7 @@ require (
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.3
+	golang.org/x/time v0.8.0
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.29.0
 	gorm.io/gorm v1.22.4

@@ -562,6 +562,53 @@
                 }
             }
         },
+        "/oauth/tokens": {
+            "post": {
+                "description": "获取token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OAUTH"
+                ],
+                "summary": "获取token",
+                "operationId": "/oauth/tokens",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TokensInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/middleware.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.TokensOutput"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/service/service_add_grpc": {
             "post": {
                 "description": "GRPC服务新增",
@@ -1902,7 +1949,7 @@
                     "type": "string",
                     "example": ""
                 },
-                "client_ip_flow_limit": {
+                "clientip_flow_limit": {
                     "description": "\u0008客户端ip限流",
                     "type": "integer",
                     "minimum": 0,
@@ -2082,6 +2129,46 @@
                     "type": "string"
                 },
                 "white_list": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.TokensInput": {
+            "type": "object",
+            "required": [
+                "grant_type",
+                "scope"
+            ],
+            "properties": {
+                "grant_type": {
+                    "description": "授权类型",
+                    "type": "string",
+                    "example": "client_credentials"
+                },
+                "scope": {
+                    "description": "权限范围",
+                    "type": "string",
+                    "example": "read_write"
+                }
+            }
+        },
+        "dto.TokensOutput": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "description": "access_token",
+                    "type": "string"
+                },
+                "expires_in": {
+                    "description": "expires_in",
+                    "type": "integer"
+                },
+                "scope": {
+                    "description": "scope",
+                    "type": "string"
+                },
+                "token_type": {
+                    "description": "token_type",
                     "type": "string"
                 }
             }
