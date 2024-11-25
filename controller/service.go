@@ -213,7 +213,6 @@ func (serviceController *ServiceController) ServiceAddHTTP(c *gin.Context) {
 	//查看服务名称是否被占用
 	serviceInfo := &dao.ServiceInfo{
 		ServiceName: serviceAddHTTPInput.ServiceName,
-		IsDelete:    0,
 	}
 	serviceInfo.Find(c, tx)
 	if serviceInfo.ID != 0 {
@@ -523,7 +522,6 @@ func (serviceController *ServiceController) ServiceAddTCP(c *gin.Context) {
 	//查看服务名称是否被占用
 	serviceInfo := &dao.ServiceInfo{
 		ServiceName: serviceAddTCPInput.ServiceName,
-		IsDelete:    0,
 	}
 	serviceInfo.Find(c, tx)
 	if serviceInfo.ID != 0 {
@@ -536,7 +534,7 @@ func (serviceController *ServiceController) ServiceAddTCP(c *gin.Context) {
 	tcpRule := &dao.TcpRule{
 		Port: serviceAddTCPInput.Port,
 	}
-	if err := tcpRule.Find(c, tx); err != nil {
+	if tcpRule.Find(c, tx); tcpRule.ID != 0 {
 		tx.Rollback()
 		middleware.ResponseError(c, 3074, errors.New("服务端口被占用，请重新输入"))
 		return
@@ -546,7 +544,7 @@ func (serviceController *ServiceController) ServiceAddTCP(c *gin.Context) {
 	grpcRule := &dao.GrpcRule{
 		Port: serviceAddTCPInput.Port,
 	}
-	if err := grpcRule.Find(c, tx); err != nil {
+	if grpcRule.Find(c, tx); grpcRule.ID != 0 {
 		tx.Rollback()
 		middleware.ResponseError(c, 3075, errors.New("服务端口被占用，请重新输入"))
 		return
@@ -733,7 +731,6 @@ func (serviceController *ServiceController) ServiceAddGRPC(c *gin.Context) {
 	//查看服务名称是否被占用
 	serviceInfo := &dao.ServiceInfo{
 		ServiceName: serviceAddGRPCInput.ServiceName,
-		IsDelete:    0,
 	}
 	serviceInfo.Find(c, tx)
 	if serviceInfo.ID != 0 {

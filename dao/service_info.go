@@ -22,7 +22,7 @@ func (serviceInfo *ServiceInfo) TableName() string {
 }
 
 func (serviceInfo *ServiceInfo) Find(c *gin.Context, tx *gorm.DB) error {
-	return tx.WithContext(c).Where(serviceInfo).Find(serviceInfo).Error
+	return tx.WithContext(c).Where(serviceInfo).Where("is_delete = 0").Find(serviceInfo).Error
 }
 
 func (serviceInfo *ServiceInfo) Save(c *gin.Context, tx *gorm.DB) error {

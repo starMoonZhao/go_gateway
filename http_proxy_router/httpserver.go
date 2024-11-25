@@ -30,7 +30,7 @@ func HttpServerRun() {
 	}
 	//启动服务器
 	log.Printf(" [INFO] HttpServerRun:%s\n", lib.GetStringConf("proxy.http.addr"))
-	if err := HttpSrvHandler.ListenAndServe(); err != nil {
+	if err := HttpSrvHandler.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalf(" [ERROR] HttpServerRun:%s err:%v\n", lib.GetStringConf("proxy.http.addr"), err)
 	}
 }
@@ -42,7 +42,7 @@ func HttpServerStop() {
 	if err := HttpSrvHandler.Shutdown(ctx); err != nil {
 		log.Fatalf(" [ERROR] HttpServerStop err:%v\n", err)
 	}
-	log.Printf(" [INFO] HttpServerStop stopped\n")
+	log.Printf(" [INFO] HttpServerStop %v stopped\n", lib.GetStringConf("proxy.http.addr"))
 }
 
 // 启动https服务器
@@ -60,17 +60,17 @@ func HttpsServerRun() {
 	}
 	//启动https服务器
 	log.Printf(" [INFO] HttpsServerRun:%s\n", lib.GetStringConf("proxy.https.addr"))
-	if err := HttpsSrvHandler.ListenAndServeTLS("./cert_file/server.cer", "./cert_file/server.key"); err != nil {
+	if err := HttpsSrvHandler.ListenAndServeTLS("./cert_file/server.cer", "./cert_file/server.key"); err != nil && err != http.ErrServerClosed {
 		log.Fatalf(" [ERROR] HttpsServerRun:%s err:%v\n", lib.GetStringConf("proxy.https.addr"), err)
 	}
 }
 
-// 停止http服务器
+// 停止https服务器
 func HttpsServerStop() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := HttpsSrvHandler.Shutdown(ctx); err != nil {
 		log.Fatalf(" [ERROR] HttpsServerStop err:%v\n", err)
 	}
-	log.Printf(" [INFO] HttpsServerStop stopped\n")
+	log.Printf(" [INFO] HttpsServerStop %v stopped\n", lib.GetStringConf("proxy.https.addr"))
 }

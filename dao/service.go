@@ -162,3 +162,25 @@ func (serviceManger *ServiceManger) HTTPAccessMode(c *gin.Context) (*ServiceDeta
 	}
 	return nil, errors.New("not matched service.")
 }
+
+func (s *ServiceManger) GetTCPServiceList() []*ServiceDetail {
+	serviceList := []*ServiceDetail{}
+	for _, serviceItem := range s.ServiceSlice {
+		tempServiceItem := serviceItem
+		if tempServiceItem.Info.LoadType == public.LoadTypeTCP {
+			serviceList = append(serviceList, tempServiceItem)
+		}
+	}
+	return serviceList
+}
+
+func (s *ServiceManger) GetGRPCServiceList() []*ServiceDetail {
+	serviceList := []*ServiceDetail{}
+	for _, serviceItem := range s.ServiceSlice {
+		tempServiceItem := serviceItem
+		if tempServiceItem.Info.LoadType == public.LoadTypeGRPC {
+			serviceList = append(serviceList, tempServiceItem)
+		}
+	}
+	return serviceList
+}

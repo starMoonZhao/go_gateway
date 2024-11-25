@@ -6,6 +6,7 @@ import (
 	"github.com/starMoonZhao/go_gateway/dao"
 	"github.com/starMoonZhao/go_gateway/http_proxy_router"
 	"github.com/starMoonZhao/go_gateway/router"
+	"github.com/starMoonZhao/go_gateway/tcp_server"
 	"os"
 	"os/signal"
 	"syscall"
@@ -56,6 +57,10 @@ func main() {
 		go func() {
 			http_proxy_router.HttpsServerRun()
 		}()
+		//启动tcp代理服务器
+		go func() {
+			tcp_server.TCPServerRun()
+		}()
 
 		quit := make(chan os.Signal)
 		signal.Notify(quit, syscall.SIGKILL, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGTERM)
@@ -66,6 +71,9 @@ func main() {
 
 		//停止https代理服务器
 		http_proxy_router.HttpsServerStop()
+
+		//停止tcp代理服务器
+		tcp_server.TCPServerStop()
 	}
 	/*	lib.InitModule("./conf/dev/", []string{"base", "mysql", "redis"})
 		defer lib.Destroy()
