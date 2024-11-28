@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/e421083458/golang_common/lib"
 	"github.com/starMoonZhao/go_gateway/dao"
+	"github.com/starMoonZhao/go_gateway/grpc_proxy_router"
 	"github.com/starMoonZhao/go_gateway/http_proxy_router"
 	"github.com/starMoonZhao/go_gateway/router"
 	"github.com/starMoonZhao/go_gateway/tcp_server"
@@ -61,6 +62,10 @@ func main() {
 		go func() {
 			tcp_server.TCPServerRun()
 		}()
+		//启动grpc代理服务器
+		go func() {
+			grpc_proxy_router.GrpcServerRun()
+		}()
 
 		quit := make(chan os.Signal)
 		signal.Notify(quit, syscall.SIGKILL, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGTERM)
@@ -74,6 +79,9 @@ func main() {
 
 		//停止tcp代理服务器
 		tcp_server.TCPServerStop()
+
+		//停止grpc代理服务器
+		grpc_proxy_router.GrpcServerStop()
 	}
 	/*	lib.InitModule("./conf/dev/", []string{"base", "mysql", "redis"})
 		defer lib.Destroy()

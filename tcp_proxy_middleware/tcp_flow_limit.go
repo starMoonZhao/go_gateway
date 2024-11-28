@@ -45,7 +45,7 @@ func TCPFlowLimitMiddleware() func(t *tcp_proxy_router.TCPRouterSliceContext) {
 		clientIP := split[0]
 
 		if serviceDetail.AccessControl.ClientIPFlowLimit > 0 {
-			clientFlowLimiter, err := circuit_rate.FlowLimiterHandler.GetFlowLimiter(fmt.Sprintf("%s_%s_client", public.FlowService, serviceDetail.Info.ServiceName), serviceDetail.AccessControl.ClientIPFlowLimit)
+			clientFlowLimiter, err := circuit_rate.FlowLimiterHandler.GetFlowLimiter(fmt.Sprintf("%s_%s_%s", public.FlowService, serviceDetail.Info.ServiceName, clientIP), serviceDetail.AccessControl.ClientIPFlowLimit)
 			if err != nil {
 				t.Conn.Write([]byte(err.Error()))
 				//中断中间件传递链

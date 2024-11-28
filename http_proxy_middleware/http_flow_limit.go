@@ -26,7 +26,7 @@ func HTTPFlowLimitMiddleware() gin.HandlerFunc {
 
 		//限流项 1.服务端 2.客户端
 		if serviceDetail.AccessControl.ServiceFlowLimit > 0 {
-			serviceFlowLimiter, err := circuit_rate.FlowLimiterHandler.GetFlowLimiter(fmt.Sprintf("%s_%s", public.FlowService, serviceDetail.Info.ServiceName), serviceDetail.AccessControl.ServiceFlowLimit)
+			serviceFlowLimiter, err := circuit_rate.FlowLimiterHandler.GetFlowLimiter(fmt.Sprintf("%s_%s_%s", public.FlowService, serviceDetail.Info.ServiceName, c.ClientIP()), serviceDetail.AccessControl.ServiceFlowLimit)
 			if err != nil {
 				middleware.ResponseError(c, 9002, err)
 				//中断中间件传递链
